@@ -3,6 +3,8 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 
 Window {
+  id: theWindow
+
   width: 640
   height: 480
   visible: true
@@ -12,6 +14,9 @@ Window {
   property alias itemBCheck: itemBCheck
   property alias itemCCheck: itemCCheck
 
+  property alias itemCLabel: itemCLabel
+
+
   Column {
       id: itemList
 
@@ -20,17 +25,49 @@ Window {
 
       spacing: 8
 
-      Component.onCompleted: {
-        console.log( "completed" );
+      TextMetrics {
+          id: metrics
 
-        console.log( itemACheck.font.pointSize );
+          font: itemCLabel.font
+          text: itemCLabel.text
+
+          property real maxWidth: theWindow.width * .75
+
+          Component.onCompleted:
+          {
+
+            var maxHeight = itemCCheck.height
+            var maxWidth  = itemCLabel.width
+
+            console.log( "TextMetrics: onCompleted - maxHeight: ", maxHeight );
+            console.log( "TextMetrics: onCompleted - maxWidth:  ", maxWidth );
+            console.log( "TextMetrics: onCompleted - pointSize: ", itemCLabel.font.pointSize );
+            console.log( "TextMetrics: onCompleted - pointSize: ", itemCCheck.font.pointSize );
+            console.log( "TextMetrics: onCompleted - width:     ", metrics.width );
+
+            while( metrics.width > maxWidth || metrics.height > maxHeight )
+            {
+              itemCLabel.font.pointSize = itemCLabel.font.pointSize - 1
+
+              console.log( "TextMetrics: onCompleted - pointSize: ", itemCLabel.font.pointSize );
+            }
+
+            console.log( "TextMetrics: onCompleted - width:     ", metrics.width );
+
+            itemCLabel.width = metrics.width
+          }
+      }
+
+      Component.onCompleted:
+      {
+        console.log( "Window onCompleted - ", metrics.height, " ", metrics.width );
       }
 
       Rectangle {
           id: itemA
           color: "#33666666"
           height: 50
-          width: 200
+          width: theWindow.width * .75
 
           Label {
               id: itemACheck
@@ -70,7 +107,7 @@ Window {
           id: itemB
           color: "#33666666"
           height: 50
-          width: 200
+          width: theWindow.width * .75
 
           Label {
               id: itemBCheck
@@ -109,7 +146,7 @@ Window {
           id: itemC
           color: "#33666666"
           height: 50
-          width: 200
+          width: theWindow.width * .75
 
           Label {
               id: itemCCheck
@@ -132,6 +169,7 @@ Window {
               id: itemCLabel
 
               height: parent.height
+              width: parent.width - itemCCheck.width - 8
 
               text: qsTr("A Little Bit longer")
               font.pointSize: 24
