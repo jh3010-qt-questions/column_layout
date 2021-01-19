@@ -14,8 +14,11 @@ Window {
   property alias itemBCheck: itemBCheck
   property alias itemCCheck: itemCCheck
 
+  property alias itemALabel: itemALabel
+  property alias itemBLabel: itemBLabel
   property alias itemCLabel: itemCLabel
 
+  property string checkMark: "✔︎"
 
   Column {
       id: itemList
@@ -31,36 +34,28 @@ Window {
           font: itemCLabel.font
           text: itemCLabel.text
 
-          property real maxWidth: theWindow.width * .75
-
           Component.onCompleted:
           {
-
-            var maxHeight = itemCCheck.height
-            var maxWidth  = itemCLabel.width
-
-            console.log( "TextMetrics: onCompleted - maxHeight: ", maxHeight );
-            console.log( "TextMetrics: onCompleted - maxWidth:  ", maxWidth );
-            console.log( "TextMetrics: onCompleted - pointSize: ", itemCLabel.font.pointSize );
-            console.log( "TextMetrics: onCompleted - pointSize: ", itemCCheck.font.pointSize );
-            console.log( "TextMetrics: onCompleted - width:     ", metrics.width );
+            var maxHeight = itemCCheck.height;
+            var maxWidth  = theWindow.width * .75;
 
             while( metrics.width > maxWidth || metrics.height > maxHeight )
             {
-              itemCLabel.font.pointSize = itemCLabel.font.pointSize - 1
-
-              console.log( "TextMetrics: onCompleted - pointSize: ", itemCLabel.font.pointSize );
+              itemCLabel.font.pointSize = itemCLabel.font.pointSize - 1;
             }
 
-            console.log( "TextMetrics: onCompleted - width:     ", metrics.width );
+            itemCLabel.width = metrics.width;
+            itemC.width      = metrics.width + 50 + 8;
 
-            itemCLabel.width = metrics.width
+            itemALabel.width = itemCLabel.width;
+            itemA.width      = itemC.width;
+
+            itemBLabel.width = itemCLabel.width;
+            itemB.width      = itemC.width;
+
+            itemALabel.font.pointSize = itemCLabel.font.pointSize;
+            itemBLabel.font.pointSize = itemCLabel.font.pointSize;
           }
-      }
-
-      Component.onCompleted:
-      {
-        console.log( "Window onCompleted - ", metrics.height, " ", metrics.width );
       }
 
       Rectangle {
@@ -72,16 +67,16 @@ Window {
           Label {
               id: itemACheck
               color: "#000000"
-              text: "✔️"
+              text: theWindow.checkMark
 
               width: parent.height
               height: parent.height
 
-              horizontalAlignment: Text.AlignHCenter
+              horizontalAlignment: Text.AlignLeft
               verticalAlignment: Text.AlignVCenter
-              font.pointSize: 100
               font.bold: true
 
+              font.pointSize: 100
               fontSizeMode: Text.Fit
               minimumPointSize: 10
           }
@@ -112,16 +107,16 @@ Window {
           Label {
               id: itemBCheck
               color: "#000000"
-              text: "✔️"
+              text: theWindow.checkMark
 
               width: parent.height
               height: parent.height
 
-              horizontalAlignment: Text.AlignHCenter
+              horizontalAlignment: Text.AlignLeft
               verticalAlignment: Text.AlignVCenter
-              font.pointSize: 100
               font.bold: true
 
+              font.pointSize: 100
               fontSizeMode: Text.Fit
               minimumPointSize: 10
           }
@@ -151,16 +146,16 @@ Window {
           Label {
               id: itemCCheck
               color: "#000000"
-              text: "✔️"
+              text: theWindow.checkMark
 
               width: parent.height
               height: parent.height
 
-              horizontalAlignment: Text.AlignHCenter
+              horizontalAlignment: Text.AlignLeft
               verticalAlignment: Text.AlignVCenter
-              font.pointSize: 100
               font.bold: true
 
+              font.pointSize: 100
               fontSizeMode: Text.Fit
               minimumPointSize: 10
           }
@@ -172,7 +167,7 @@ Window {
               width: parent.width - itemCCheck.width - 8
 
               text: qsTr("A Little Bit longer")
-              font.pointSize: 24
+              font.pointSize: 50
 
               verticalAlignment: Text.AlignVCenter
 
